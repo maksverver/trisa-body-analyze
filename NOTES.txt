@@ -1,4 +1,4 @@
-Trisa Body Analyzer 4.0
+Trisa Body Analyze 4.0
 Device name: 11257B
 Generic type: Transtek_WS1257B
 In App: "1257B" maps to "GBF-1257-B" (note: single leading 1)

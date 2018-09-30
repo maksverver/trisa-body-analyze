@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-# Tool to read weight measurement data from Trisa Body Analyzer 4.0,
+# Tool to read weight measurement data from Trisa Body Analyze 4.0,
 # a smart scale that connects through Bluetooth 4.0 BLE.
 
 # This script uses the `gatt` package to use Bluetooth GATT.
@@ -188,7 +188,7 @@ def ParseWeightScaleMeasurementData(data):
         measurement_impedance_status = measurement_impedance_status,
         has_append_measurement_data = has_append_measurement_data)
 
-class TrisaBodyAnalyzerSmartScale(gatt.Device):
+class TrisaBodyAnalyzeSmartScale(gatt.Device):
     def __init__(self, mac_address, manager, managed=True):
         super().__init__(mac_address, manager, managed)
         self.weight_scale_service = None
@@ -314,7 +314,7 @@ def Main():
         print('Hit ^C to disconnect and finish pairing.')
     manager = gatt.DeviceManager(adapter_name=ADAPTER)
     print('Connecting to MAC', MAC)
-    device = TrisaBodyAnalyzerSmartScale(manager=manager, mac_address=MAC)
+    device = TrisaBodyAnalyzeSmartScale(manager=manager, mac_address=MAC)
     device.connect()
     try:
         manager.run()
