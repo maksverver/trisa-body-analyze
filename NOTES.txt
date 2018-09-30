@@ -1,7 +1,11 @@
 Trisa Body Analyze 4.0
-Device name: 11257B
+Device name: 11257B*
 Generic type: Transtek_WS1257B
 In App: "1257B" maps to "GBF-1257-B" (note: single leading 1)
+
+*If the host sets the broadcast id when pairing, then the device name becomes
+"01257Baabbccdd" where <aabbccdd> is the hex-encoded broadcast id (uppercase).
+Note that the device name prefix has changed from "11257B" to "01257B"!
 
 % btgatt-client -d ${MAC} -t random
 
@@ -75,7 +79,7 @@ To pair:
  - Register for notifications from characteristics 8a21, 8a22, 8a82.
  - Receive from 8a82: `a0AABBCCDD' (where AABBCCDD is a 32-bit password)
    Save the password somewhere.
- - Send to 8a81: `21ff000001` (0x21: set broadcast id)
+ - Send to 8a81: `21AABBCCDD` (0x21: set broadcast id to AABBCCDD)
  - Send to 8a81: `22` (0x22: disconnect)
  - Disconnect from device to complete pairing!
 

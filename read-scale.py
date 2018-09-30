@@ -27,6 +27,13 @@ UPLOAD_COMMAND_CHARACTERISTIC_UUID = '00008a82-0000-1000-8000-00805f9b34fb'
 # Generated with: `date --date='TZ="UTC" 2010-01-01 00:00:00' +%s`
 TIMESTAMP_OFFSET = 1262304000
 
+# 4-byte broadcast identifier.
+#
+# This is set by the host during pairing. Aterwards, the scale will identify
+# itself as '01257B' + <hex encoded broadcast id> (so the device name will be
+# 14 characters long, in total).
+#BROADCAST_ID=b'\x01\x02\x03\0x04'
+
 class WeightUnit(enum.Enum):
     KILOGRAM = 0
     POUND = 1
@@ -98,8 +105,7 @@ def GetAuthCommand(challenge):
 
 def GetSetBroadcastIdCommand():
     # 0x21 == DOWNLOAD_INFORMATION_BROADCAST_ID_COMMAND
-    # No clue what the other 4 bytes are supposed to be.
-    return b'\x21\xff\x00\x00\x01'
+    return b'\x21' + BROADCAST_ID
 
 def GetDisconnectCommand():
     return b'\x22'
