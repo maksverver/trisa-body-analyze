@@ -32,7 +32,7 @@ TIMESTAMP_OFFSET = 1262304000
 # This is set by the host during pairing. Aterwards, the scale will identify
 # itself as '01257B' + <hex encoded broadcast id> (so the device name will be
 # 14 characters long, in total).
-#BROADCAST_ID=b'\x01\x02\x03\0x04'
+BROADCAST_ID=b'\x01\x02\x03\x04'
 
 class WeightUnit(enum.Enum):
     KILOGRAM = 0
@@ -197,11 +197,7 @@ def ParseWeightScaleMeasurementData(data):
 class TrisaBodyAnalyzeSmartScale(gatt.Device):
     def __init__(self, mac_address, manager, managed=True):
         super().__init__(mac_address, manager, managed)
-        self.weight_scale_service = None
-        self.measurement_characteristic = None
-        self.append_measurement_characteristic = None
         self.download_command_characteristic = None
-        self.upload_command_characteristic = None
         self.measurement_characteristic_notifications_enabled = False
         self.append_measurement_characteristic_notifications_enabled = False
         self.upload_command_characteristic_notifications_enabled = False
@@ -211,28 +207,21 @@ class TrisaBodyAnalyzeSmartScale(gatt.Device):
     def services_resolved(self):
         super().services_resolved()
 
+        print('Device name:', self.alias())
+
+        all_characteristics = {}
         for s in self.services:
-            if s.uuid == WEIGHT_SCALE_SERVICE_UUID:
-                self.weight_scale_service = s
-        assert self.weight_scale_service is not None
+            for c in s.characteristics:
+                all_characteristics[s.uuid, c.uuid] = c
 
-        for c in self.weight_scale_service.characteristics:
-            if c.uuid == MEASUREMENT_CHARACTERISTIC_UUID:
-                self.measurement_characteristic = c
-            elif c.uuid == APPEND_MEASUREMENT_CHARACTERISTIC_UUID:
-                self.append_measurement_characteristic = c
-            elif c.uuid == DOWNLOAD_COMMAND_CHARACTERISTIC_UUID:
-                self.download_command_characteristic = c
-            elif c.uuid == UPLOAD_COMMAND_CHARACTERISTIC_UUID:
-                self.upload_command_characteristic = c
-        assert self.measurement_characteristic is not None
-        assert self.append_measurement_characteristic is not None
-        assert self.download_command_characteristic is not None
-        assert self.upload_command_characteristic is not None
+        measurement_characteristic = all_characteristics[WEIGHT_SCALE_SERVICE_UUID, MEASUREMENT_CHARACTERISTIC_UUID]
+        append_measurement_characteristic = all_characteristics[WEIGHT_SCALE_SERVICE_UUID, APPEND_MEASUREMENT_CHARACTERISTIC_UUID]
+        self.download_command_characteristic = all_characteristics[WEIGHT_SCALE_SERVICE_UUID, DOWNLOAD_COMMAND_CHARACTERISTIC_UUID]
+        upload_command_characteristic = all_characteristics[WEIGHT_SCALE_SERVICE_UUID, UPLOAD_COMMAND_CHARACTERISTIC_UUID]
 
-        self.measurement_characteristic.enable_notifications()
-        self.append_measurement_characteristic.enable_notifications()
-        self.upload_command_characteristic.enable_notifications()
+        measurement_characteristic.enable_notifications()
+        append_measurement_characteristic.enable_notifications()
+        upload_command_characteristic.enable_notifications()
 
     def set_notifications_enabled(self, characteristic, value):
         if characteristic.uuid == MEASUREMENT_CHARACTERISTIC_UUID:
