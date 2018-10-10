@@ -147,5 +147,22 @@ From the app:
   weight = 76.1 kg
   BMI 24.8, Fat: 18.3% Muscles: 43.2% Water: 60.6% Bones: 3.4 kg
 
+Another example:
+  9f:b0:1d:00:fe:dc:2f:81:10:00:00:00:ff:0a:15:00:ff:00:09:00
+
+  WeightScaleMeasurementData(
+    weight_kg=76.0,
+    display_unit=<WeightUnit.KILOGRAM: 0>,
+    timestamp=1539205852,
+    resistance1=0.0,
+    resistance2=538.6,
+    user_number=0,
+    measurement_weight_status=<MeasurementWeightStatus.STABLE: 1>,
+    measurement_impedance_status=<MeasurementImpedanceStatus.FINISH: 4>,
+    has_append_measurement_data=False)
+
+  From the MedM health app (user profile: male, 186 cm, 36 years old)
+    BMI 21.9, Fat: 14.6%, Muscles: 43.4%, Water: 64.4%, Bones: 3.4 kg
+    Basal Metabolic Rate: 2776 kcal
 
 EOF
